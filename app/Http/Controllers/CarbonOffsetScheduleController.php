@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Domains\CarbonOffsetScheduling\Command\GetScheduleCommand;
 use App\Domains\CarbonOffsetScheduling\Service\SchedulingService;
+use App\Http\RequestRules\GetCarbonOffsetScheduleRequest\SubscriptionStartDateTodayOrBefore;
+use App\Http\RequestRules\GetCarbonOffsetScheduleRequest\SubscriptionStartDateValidFormat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +15,7 @@ class CarbonOffsetScheduleController
     {
         $validator = Validator::make($request->all(), [
             'scheduleInMonths' => ['required', 'integer', 'between:0,36'],
-            'subscriptionStartDate' => ['required']
+            'subscriptionStartDate' => ['required', new SubscriptionStartDateValidFormat, new SubscriptionStartDateTodayOrBefore]
         ]);
 
         if ($validator->fails()) {
