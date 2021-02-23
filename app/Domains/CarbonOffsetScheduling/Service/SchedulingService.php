@@ -3,14 +3,14 @@
 namespace App\Domains\CarbonOffsetScheduling\Service;
 
 use App\Domains\CarbonOffsetScheduling\Command\GetScheduleCommand;
-use App\Domains\CarbonOffsetScheduling\Model\ScheduleAsList;
+use App\Domains\CarbonOffsetScheduling\Model\Schedule;
 
 class SchedulingService
 {
-    public function getSchedule(GetScheduleCommand $command): ScheduleAsList
+    public function getSchedule(GetScheduleCommand $command): Schedule
     {
         if ($command->scheduleLengthInMonths < 1) {
-            return new ScheduleAsList([]);
+            return new Schedule([]);
         }
 
         $scheduleDates = [];
@@ -27,6 +27,6 @@ class SchedulingService
             $scheduleDates[] = $scheduleDate->format('Y-m-d');
         }
 
-        return new ScheduleAsList($scheduleDates);
+        return new Schedule($scheduleDates);
     }
 }
