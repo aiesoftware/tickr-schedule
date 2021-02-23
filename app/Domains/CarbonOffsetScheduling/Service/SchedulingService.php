@@ -2,19 +2,21 @@
 
 namespace App\Domains\CarbonOffsetScheduling\Service;
 
+use App\Domains\CarbonOffsetScheduling\Command\GetScheduleCommand;
+
 class SchedulingService
 {
-    public function getSchedule(int $scheduleLengthInMonths, \DateTimeImmutable $subscriptionStartDate): array
+    public function getSchedule(GetScheduleCommand $command): array
     {
-        if ($scheduleLengthInMonths < 1) {
+        if ($command->scheduleLengthInMonths < 1) {
             return [];
         }
 
         $scheduleDates = [];
-        for ($i = 1; $i <= $scheduleLengthInMonths; $i++) {
-            $scheduleDate = $subscriptionStartDate->add(new \DateInterval(sprintf('P%dM', $i)));
+        for ($i = 1; $i <= $command->scheduleLengthInMonths; $i++) {
+            $scheduleDate = $command->subscriptionStartDate->add(new \DateInterval(sprintf('P%dM', $i)));
 
-            $baseDay = (int) $subscriptionStartDate->format('d');
+            $baseDay = (int) $command->subscriptionStartDate->format('d');
             $scheduleDay = (int) $scheduleDate->format('d');
 
             if ($baseDay !== $scheduleDay) {
