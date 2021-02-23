@@ -1,9 +1,20 @@
-##### Install dependencies
+Run the app:
 
-`$ docker-compose -f docker-compose-cmd.yml run composer install`
+```
+$ make install
+$ make run
+```
 
-##### Run app
+Endpoint is accessible on `localhost:8060`
 
-`$ docker-compose up`
+Run the entire test suite:
+```
+$ make tests_all
+```
 
+Or individual suites:
+```
+$ make tests_feature
+$ make tests_unit
+```
 
