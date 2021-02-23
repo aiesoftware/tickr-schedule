@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy env file
+        run: cp .env.ci .env
+      - name: Install dependencies
+        run: make install
+      - name: Start server
+        run: make start
+      - name: Generate app key
+        run: docker-compose exec -T app php artisan key:generate
+      - name: Clear cache
+        run: rm -rf bootstrap/cache/*
+      - name: Run tests
+        run: make tests_all
+      - name: Stop server
+        run: make stop
