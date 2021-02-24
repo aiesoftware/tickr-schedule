@@ -2,9 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Domains\CarbonOffsetScheduling\Command\GetScheduleCommand;
-use App\Domains\CarbonOffsetScheduling\Model\Schedule;
-use App\Domains\CarbonOffsetScheduling\Service\SchedulingService;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -12,15 +9,6 @@ class CarbonOffsetScheduleTest extends TestCase
 {
     public function testResponseShape(): void
     {
-        $serviceMock = $this->createMock(SchedulingService::class);
-        $serviceMock
-            ->expects($this->once())
-            ->method('getSchedule')
-            ->with($this->isInstanceOf(GetScheduleCommand::class))
-            ->willReturn(new Schedule(['2020-02-01', '2020-03-01']));
-
-        $this->app->instance(SchedulingService::class, $serviceMock);
-
         $response = $this->get('/carbon-offset-schedule?subscriptionStartDate=2020-01-01&scheduleInMonths=2');
         $this->assertEquals(json_encode(['2020-02-01', '2020-03-01']), $response->content());
     }
@@ -28,7 +16,7 @@ class CarbonOffsetScheduleTest extends TestCase
     /**
      * @dataProvider innerBoundaryRequests
      */
-    public function testInnerRequestBoundaries(string $url, string $outputMessage): void
+    public function testInnerBoundaryRequests(string $url, string $outputMessage): void
     {
         $response = $this->get($url);
         $this->assertEquals(Response::HTTP_OK, $response->status(), $outputMessage);
